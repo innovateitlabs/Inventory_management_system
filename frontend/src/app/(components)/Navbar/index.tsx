@@ -1,11 +1,26 @@
 "use client";
 
 import React from "react";
-import { Menu, Bell, Sun, Settings } from "lucide-react";
+import { Menu, Bell, Sun, Settings, Moon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/app/redux";
+import { setIsDarkMode, setIsSidebarCollapsed } from "@/state";
 
-const Navbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
+const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const isSidebarCollapsed = useAppSelector(
+    (state) => state.global.isSidebarCollapsed
+  );
+  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
+
+  const toggleSidebar = () => {
+    dispatch(setIsSidebarCollapsed(!isSidebarCollapsed));
+  };
+
+  const toggleDarkMode = () => {
+    dispatch(setIsDarkMode(!isDarkMode));
+  };
   return (
     <div className="flex justify-between items-center w-full mb-7">
       {/* Left Side */}
@@ -35,8 +50,12 @@ const Navbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
       <div className="flex justify-between items-center gap-5">
         <div className="hidden md:flex justify-between items-center gap-5">
           <div>
-            <button onClick={() => {}}>
-              <Sun className="cursor-pointer text-gray-500" size={24} />
+            <button onClick={toggleDarkMode}>
+              {isDarkMode ? (
+                <Sun className="cursor-pointer text-gray-500" size={24} />
+              ) : (
+                <Moon className="cursor-pointer text-gray-500" size={24} />
+              )}
             </button>
           </div>
           <div className="relative">
@@ -47,13 +66,14 @@ const Navbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
           </div>
           <hr className="w-0 h-7 border border-solid border-l border-gray-300 mx-3" />
           <div className="flex items-center gap-3 cursor-pointer">
-            <Image
+            <div className="w-50 h-50 rounded-full border" />
+            {/* <Image
               src=""
               alt="Profile"
               width={50}
               height={50}
               className="rounded-full h-full object-cover"
-            />
+            /> */}
             <span className="font-semibold">Ed Roh</span>
           </div>
         </div>
